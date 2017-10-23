@@ -15,7 +15,8 @@ var config =
     {
         root: rootPath,
         app: { name: 'ToDo' },
-        port: 4000
+        port: 4000,
+        db: 'mongodb://127.0.0.1/todo-test'
     },
     production:
     {

@@ -30,13 +30,20 @@ module.exports = function(grunt)
 
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-nodemon');
-
+    
     grunt.registerTask('default',
     [
         'env:dev',
         'jshint',
         'nodemon'
     ]);
+    
+    // grunt.registerTask('test',
+    // [
+    //     'env:test',
+    //     'jshint',
+    //     'npm test'
+    // ]);
     
     grunt.registerTask('production',
     [

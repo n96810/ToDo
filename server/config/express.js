@@ -1,14 +1,34 @@
 var express = require('express');
 var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
+var bluebird = require('bluebird');
+var glob = require('glob');
+var logger = require('./logger');
 
 module.exports = function(app, config)
 {
+    app.use(require('morgan')('dev'));
+    
+    mongoose.set('debug', true);
+    mongoose.connection.once('open', function callback(){ logger.log('Mongoose connected to the database'); });
+    
+    logger.log('Loading Mongoose functionality...');
+    mongoose.Promise = require('bluebird');
+    mongoose.connect(config.db, { useMongoClient: true});
+    var db = mongoose.connection;
+    db.on('error', function() { throw new Error('Unable to connect to database at ' + config.db); });
+    
+    var models = glob.sync(config.root + '/app/models/*.js');
+    models.forEach(function(model){ require(model); });
+
+    var controllers = glob.sync(config.root + 'app/model/controllers/*.js');
+    controllers.forEach(function(controller){ require(controller); });
+
     if (process.env.NODE_ENV !== 'test')
     {
-        app.use(require('morgan')('dev'));
         app.use(function(req, res, next)
         {
-            log('Request from ' + req.connection.remoteAddress);
+            logger.log('Request from ' + req.connection.remoteAddress);
             next();
         });
     }
@@ -17,13 +37,14 @@ module.exports = function(app, config)
     app.use(bodyParser.urlencoded({"extended": true}));
 
     require('../app/controllers/users')(app, config);
+    require('../app/controllers/todos')(app, config);
     
-    var users =
-    [
-        {name: 'John', email:'woo@hoo.com'},
-        {name: 'Betty', email:'loo@hoo.com'},
-        {name: 'Hal', email:'boo@hoo.com'}
-    ];
+    // var users =
+    // [
+    //     {name: 'John', email:'woo@hoo.com'},
+    //     {name: 'Betty', email:'loo@hoo.com'},
+    //     {name: 'Hal', email:'boo@hoo.com'}
+    // ];
 
     app.get('api/users', function(req, res){
         res.status(200).json(users);
@@ -40,11 +61,12 @@ module.exports = function(app, config)
     
     app.use(function(err, req, res, next)
     {
-        log(err.stack);
+        if (process.env.NODE_ENV !== 'test') logger.log(err.stack);
+        
         res.type('text/plan');
         res.status(500);
         res.send('500 server error');
     });
     
-    log('Starting application');
+    logger.log('Starting application');
 };
