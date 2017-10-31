@@ -1,0 +1,25 @@
+{
+  "name": "exam1",
+  "version": "1.0.0",
+  "description": "BUS ADM 810 - Exam 1",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/n96810/ToDo.git"
+  },
+  "author": "Steven Nelson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/n96810/ToDo/issues"
+  },
+  "homepage": "https://github.com/n96810/ToDo#readme",
+  "dependencies": {
+    "bluebird": "^3.5.1",
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "mongoose": "^4.12.5"
+  }
+}
