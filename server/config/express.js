@@ -4,9 +4,12 @@ var mongoose = require('mongoose');
 var bluebird = require('bluebird');
 var glob = require('glob');
 var logger = require('./logger');
+var cors = require('cors');
 
 module.exports = function(app, config)
 {
+    app.use(cors({ "origin":"http://localhost:9000" }));
+    
     app.use(require('morgan')('dev'));
     
     mongoose.set('debug', true);
@@ -61,11 +64,15 @@ module.exports = function(app, config)
     
     app.use(function(err, req, res, next)
     {
-        if (process.env.NODE_ENV !== 'test') logger.log(err.stack);
-        
+        console.log(err);
+        if (process.env.NODE_ENV !== 'test') logger.log(err.stack, 'error');
+
         res.type('text/plan');
-        res.status(500);
-        res.send('500 server error');
+        if (err.status) {
+            res.status(err.status).send(err.message);
+        } else {
+            res.status(500).send('500 Server Error');
+        }
     });
     
     logger.log('Starting application');
