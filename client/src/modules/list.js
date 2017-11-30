@@ -11,6 +11,7 @@ export class List {
         
         this.user = JSON.parse(sessionStorage.getItem("user"));
         this.showList = true;
+        this.showCompleted = false;
         this.priorities = ["Low", "Medium", "High", "Critical"];
     }
 
@@ -53,5 +54,11 @@ export class List {
     
     deleteTodo(todo) {
         this.todos.deleteTodo(todo._id);
+    }
+
+    completeTodo(todo) {
+        todo.completed = !todo.completed;
+        this.todoObj = todo;
+        this.saveTodo();
     }
 }
