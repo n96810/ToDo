@@ -6,7 +6,6 @@ import {AuthService} from "aurelia-auth";
 @inject(Router, Users, AuthService)
 export class Home {
     constructor(router, users, auth) {
-        console.log("Router is " + router);
         this.router = router;
         this.auth = auth;
         this.loginError = "";
@@ -20,12 +19,13 @@ export class Home {
         .then(response => {
             sessionStorage.setItem("user", JSON.stringify(response.user));
             this.loginError = "";
-            this.router.navigate('list');
+            this.router.navigate('List');
         })
         .catch(error => {
+            console.log("login failed");
             console.log(error);
             this.loginError = "Invalid credentials.";
-        })
+        });
     }
 
     showRegister() {
