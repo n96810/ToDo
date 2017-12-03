@@ -20,13 +20,15 @@ export class ToDos {
     async save(todo) {
         if (todo) {
             if (!todo._id) {
-                let response = await this.data.post(todo, this.TODO_SERVICE + "/" + todo._id);
+                console.log("Saving Todo...");
+                console.log(this.TODO_SERVICE);
+                let response = await this.data.post(todo, this.TODO_SERVICE);
                 if (!response.error) {
                     this.todosArray.push(response);
                 }
                 return response;
             } else {
-                let response = await this.data.put(user, this.TODO_SERVICE + "/" + todo._id);
+                let response = await this.data.put(todo, this.TODO_SERVICE + "/" + todo._id);
                 if (!response.error) {
                     //this.todosArray.push(response);
                 }
@@ -44,5 +46,16 @@ export class ToDos {
                 }
             }
         }
+    }
+    
+    async uploadFile(files, userId, todoId) {
+        let formData = new FormData();
+
+        files.forEach((item, index) => {
+            formData.append("file" + index, item);
+        });
+
+        let response = await this.data.uploadFiles(formData, this.TODO_SERVICE + "/upload/" + userId + "/" + todoId);
+        return response;
     }
 }

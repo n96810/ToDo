@@ -49,6 +49,9 @@ module.exports = function(app, config)
     //     {name: 'Hal', email:'boo@hoo.com'}
     // ];
 
+    app.use(bodyParser.json({ "limit": "1000mb" }));
+    app.use(bodyParser.urlencoded({ "limit": "1000mb", "extended":true }));
+
     app.get('api/users', function(req, res){
         res.status(200).json(users);
     });
