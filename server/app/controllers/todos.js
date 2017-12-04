@@ -42,14 +42,14 @@ module.exports = function(app, config) {
         });
     });
     
-    router.get('/todos/:Id', function(req, res, next) {
-        logger.log('GET todo with id: ' + req.params.id, 'verbose');
-        ToDo.findById(req.params.id)
+    router.get('/todos/:todoId', function(req, res, next) {
+        logger.log('GET todo with id: ' + req.params.todoId, 'verbose');
+        ToDo.findById(req.params.todoId)
         .then(todo => {
             if (todo) {
                 res.status(200).json(todo);
             } else {
-                res.status(404).json({ "msg":"No todo with id " + req.params.id + " found" });
+                res.status(404).json({ "msg":"No todo with id " + req.params.todoId + " found" });
             }
         })
         .catch(err => { return next(err); });
@@ -64,7 +64,7 @@ module.exports = function(app, config) {
         .catch(err => { return next(err); });
     });
 
-    router.post("todos/upload/:userId/:todosId", upload.any(), function(req, res, next) {
+    router.post("todos/uploads/:userId/:todoId", upload.any(), function(req, res, next) {
         logger.log("Upload file for todo " + req.params.todoId + " and " + req.params.userId, "verbose");
 
         ToDo.findById(req.params.todoId, function(err, todo) {
@@ -72,6 +72,8 @@ module.exports = function(app, config) {
                 return next(err);
             } else {
                 if (req.files) {
+                    logger.log("filename: " + req.files[0].filename);
+                    logger.log("originalName: " + req.files[0].originalName);
                     todo.file = {
                         "filename": req.files[0].filename,
                         "originalName": req.files[0].originalName,
@@ -91,17 +93,17 @@ module.exports = function(app, config) {
     });
     
     router.put('/todos/:todoId', function(req, res, next) {
-        logger.log('Update a todo with id: ' + req.params.id, 'verbose');
-
-        var toDo = ToDo.findOneAndUpdate({ "_id":req.params.id }, req.body, { "new":true, "multi":false })
-        .then(result => { res.status(200).json(toDo); })
+        logger.log('Update a todo with id: ' + req.params.todoId, 'verbose');
+        
+        ToDo.findOneAndUpdate({ "_id":req.params.todoId }, req.body, { "new":true, "multi":false })
+        .then(toDo => { res.status(200).json(toDo); })
         .catch(err => { return next(err); });
     });
     
     router.delete('/todos/:todoId', function(req, res, next) {
-        logger.log('Delete a todo with id: ' + req.params.id, 'verbose');
+        logger.log('Delete a todo with id: ' + req.params.todoId, 'verbose');
 
-        ToDo.remove({ "_id":req.params.id })
+        ToDo.remove({ "_id":req.params.todoId })
         .then(result => { res.status(200).json({ "msg":"ToDo deleted" }); })
         .catch(err => { return next(err); });
     });

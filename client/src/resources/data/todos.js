@@ -4,7 +4,6 @@ import {DataServices} from "./data-services";
 @inject(DataServices)
 export class ToDos {
     constructor(data) {
-        console.log("starting todos");
         this.data = data;
         this.TODO_SERVICE = "todos";
         this.todosArray = [];
@@ -20,8 +19,6 @@ export class ToDos {
     async save(todo) {
         if (todo) {
             if (!todo._id) {
-                console.log("Saving Todo...");
-                console.log(this.TODO_SERVICE);
                 let response = await this.data.post(todo, this.TODO_SERVICE);
                 if (!response.error) {
                     this.todosArray.push(response);
@@ -50,12 +47,14 @@ export class ToDos {
     
     async uploadFile(files, userId, todoId) {
         let formData = new FormData();
+        console.log(JSON.stringify(files[0]));
+        console.log(JSON.stringify(files[1]));
 
         files.forEach((item, index) => {
             formData.append("file" + index, item);
         });
 
-        let response = await this.data.uploadFiles(formData, this.TODO_SERVICE + "/upload/" + userId + "/" + todoId);
+        let response = await this.data.uploadFiles(formData, this.TODO_SERVICE + "/uploads/" + userId + "/" + todoId);
         return response;
     }
 }

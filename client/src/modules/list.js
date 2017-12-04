@@ -5,7 +5,6 @@ import {AuthService} from "aurelia-auth";
 @inject(ToDos, AuthService)
 export class List {
     constructor(todos, auth) {
-        console.log('starting list');
         this.todos = todos;
         this.auth = auth;
         
