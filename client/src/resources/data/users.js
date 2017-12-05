@@ -10,7 +10,7 @@ export class Users {
 
     async save(user) {
         if (user) {
-            let severResponse = await this.data.post(user, this.USER_SERVICE);
+            let serverResponse = await this.data.post(user, this.USER_SERVICE);
             return serverResponse;
         }
     }

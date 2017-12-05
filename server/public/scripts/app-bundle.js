@@ -44,7 +44,7 @@ define('auth-config',["exports"], function (exports) {
         value: true
     });
     var authConfig = {
-        "baseUrl": "http://localhost:5000/api",
+        "baseUrl": "http://localhost:80/api",
         "loginUrl": "/users/login",
         "tokenName": "token",
         "authHeader": "Authorization",
@@ -448,7 +448,7 @@ define('resources/data/data-services',['exports', 'aurelia-framework', 'aurelia-
             _classCallCheck(this, DataServices);
 
             this.httpClient = http;
-            this.BASE_URL = "http://localhost:5000/api/";
+            this.BASE_URL = "http://localhost:80/api/";
 
             this.httpClient.configure(function (config) {
                 config.withBaseUrl(_this.BASE_URL).withDefaults({
@@ -806,7 +806,7 @@ define('resources/data/users',['exports', 'aurelia-framework', './data-services'
 
         Users.prototype.save = function () {
             var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(user) {
-                var severResponse;
+                var serverResponse;
                 return regeneratorRuntime.wrap(function _callee$(_context) {
                     while (1) {
                         switch (_context.prev = _context.next) {
@@ -820,7 +820,7 @@ define('resources/data/users',['exports', 'aurelia-framework', './data-services'
                                 return this.data.post(user, this.USER_SERVICE);
 
                             case 3:
-                                severResponse = _context.sent;
+                                serverResponse = _context.sent;
                                 return _context.abrupt('return', serverResponse);
 
                             case 5:
@@ -1026,8 +1026,8 @@ define('resources/value-converters/date-format',["exports", "moment"], function 
     }();
 });
 define('text!app.html', ['module'], function(module) { module.exports = "<template><require from=\"resources/css/styles.css\"></require><router-view></router-view></template>"; });
-define('text!modules/home.html', ['module'], function(module) { module.exports = "<template><h1>${message}</h1><compose show.bind=\"showLogin\" view=\"./components/login.html\"></compose><compose show.bind=\"!showLogin\" view=\"./components/register.html\"></compose></template>"; });
 define('text!resources/css/styles.css', ['module'], function(module) { module.exports = ".rightMargin {\r\n    margin-right: 10px;\r\n}"; });
+define('text!modules/home.html', ['module'], function(module) { module.exports = "<template><h1>${message}</h1><compose show.bind=\"showLogin\" view=\"./components/login.html\"></compose><compose show.bind=\"!showLogin\" view=\"./components/register.html\"></compose></template>"; });
 define('text!modules/list.html', ['module'], function(module) { module.exports = "<template><h1>${message}</h1><compose show.bind=\"showList\" view=\"./components/todoList.html\"></compose><compose show.bind=\"!showList\" view=\"./components/todoForm.html\"></compose></template>"; });
 define('text!modules/components/login.html', ['module'], function(module) { module.exports = "<template><div id=\"errorMsg\" innerhtml.bind=\"loginError\"></div><label for=\"email\">Email</label><input value.bind=\"email\" type=\"email\" autofocus class=\"form-control\" id=\"email\" placeholder=\"Email\"><label for=\"password\">Password</label><input value.bind=\"password\" type=\"password\" class=\"form-control\" id=\"password\" placeholder=\"Password\"><button click.trigger=\"login()\">Login</button> <span class=\"registerLink\" click.trigger=\"showRegister()\">Register</span></template>"; });
 define('text!modules/components/register.html', ['module'], function(module) { module.exports = "<template>First Name: <input value.bind=\"user.firstName\"> Last Name: <input value.bind=\"user.lastName\"> Email: <input value.bind=\"user.email\"> Password: <input value.bind=\"user.password\" type=\"password\"> <button click.trigger=\"save()\">Save</button></template>"; });

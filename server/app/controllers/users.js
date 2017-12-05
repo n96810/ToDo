@@ -44,7 +44,7 @@ module.exports = function(app, config) {
 
     router.post('/users', function(req, res, next) {
         logger.log('Saving user', 'verbose');
-        
+        console.log(req.body);
         var user = new User(req.body);
         user.save()
         .then(result => { res.status(201).json(result); })
