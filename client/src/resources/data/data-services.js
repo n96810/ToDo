@@ -99,6 +99,6 @@ export class DataServices {
         })
         .catch(error => {
             return error;
-        })
+        });
     }
 }

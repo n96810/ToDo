@@ -14,8 +14,9 @@ var todoSchema = new Schema(
     "completed": { type: Boolean, default: false },
     "file":
     {
-        fileName: { type: String },
-        originalName: { type: String }
+        "filename": { type: String },
+        "originalName": { type: String },
+        "dateUploaded": { type: Date, default: Date.now() }
     }
 });
 

@@ -37,7 +37,7 @@ export class ToDos {
     async deleteTodo(id) {
         let response = await this.data.delete(this.TODO_SERVICE + "/" + id);
         if (!response.error) {
-            for (let i = 0; i < todosArray.length; i++) {
+            for (let i = 0; i < this.todosArray.length; i++) {
                 if (this.todosArray[i]._id === id) {
                     this.todosArray.splice(i, 1);
                 }
@@ -47,8 +47,6 @@ export class ToDos {
     
     async uploadFile(files, userId, todoId) {
         let formData = new FormData();
-        console.log(JSON.stringify(files[0]));
-        console.log(JSON.stringify(files[1]));
 
         files.forEach((item, index) => {
             formData.append("file" + index, item);

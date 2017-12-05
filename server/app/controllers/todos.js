@@ -4,30 +4,32 @@ var express = require('express'),
 router = express.Router(),
 logger = require('../../config/logger'),
 multer = require('multer'),
-mkdirp = require('mkdirp'),
-upload = multer({ "storage": "storage" });
+mkdirp = require('mkdirp');
 
 var mongoose = require('mongoose'),
 ToDo = mongoose.model('ToDo');
 
-var storage = multer.diskStorage({
-    "destination": function(req, file, cb) {
-        var path = config.uploads + req.params.userId + "/";
-        mkdirp(path, function(err) {
-            if (err) {
-                res.status(500).json(err);
-            } else {
-                cb(null, path);
-            }
-        });
-    },
-    "filename": function(req, file, cb) {
-        let fileName = file.originalname.split(".");
-        cb(null, fileName[0] + new Date().getTime() + "." + fileName[fileName.length - 1]);
-    }
-});
-
 module.exports = function(app, config) {
+    
+    var storage = multer.diskStorage({
+        "destination": function(req, file, cb) {
+            var path = config.uploads + req.params.userId + "/" + req.params.todoId;
+            mkdirp(path, function(err) {
+                if (err) {
+                    res.status(500).json(err);
+                } else {
+                    cb(null, path);
+                }
+            });
+        },
+        "filename": function(req, file, cb) {
+            let fileName = file.originalname.split(".");
+            cb(null, fileName[0] + new Date().getTime() + "." + fileName[fileName.length - 1]);
+        }
+    });
+    
+    var upload = multer({ "storage": storage });
+
     app.use('/api', router);
     
     router.get('/todos/user/:userId', function(req, res, next) {
@@ -64,7 +66,7 @@ module.exports = function(app, config) {
         .catch(err => { return next(err); });
     });
 
-    router.post("todos/uploads/:userId/:todoId", upload.any(), function(req, res, next) {
+    router.post("/todos/uploads/:userId/:todoId", upload.any(), function(req, res, next) {
         logger.log("Upload file for todo " + req.params.todoId + " and " + req.params.userId, "verbose");
 
         ToDo.findById(req.params.todoId, function(err, todo) {
@@ -72,11 +74,9 @@ module.exports = function(app, config) {
                 return next(err);
             } else {
                 if (req.files) {
-                    logger.log("filename: " + req.files[0].filename);
-                    logger.log("originalName: " + req.files[0].originalName);
                     todo.file = {
                         "filename": req.files[0].filename,
-                        "originalName": req.files[0].originalName,
+                        "originalName": req.files[0].originalname,
                         "dateUploaded": new Date()
                     };
 

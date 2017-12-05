@@ -10,7 +10,7 @@ var config =
         app: { name: 'ToDo' },
         port: 5000,
         db: 'mongodb://127.0.0.1/todo-dev',
-        "uploads": rootPath + "/public/uploads",
+        "uploads": rootPath + "/public/uploads/",
         secret: "pudgyPies"
     },
     test:
@@ -19,6 +19,7 @@ var config =
         app: { name: 'ToDo' },
         port: 4000,
         db: 'mongodb://127.0.0.1/todo-test',
+        "uploads": rootPath + "/public/uploads/",
         secret: "superDuperPudgyPies"
     },
     production:
@@ -26,6 +27,8 @@ var config =
         root: rootPath,
         app: { name: 'ToDo' },
         port: 80,
+        db: 'mongodb://127.0.0.1/todo-prod',
+        "uploads": rootPath + "/public/uploads/",
         secret: "superDuperDoubleTriplePudgyPies"
     }
 };
